@@ -16,8 +16,9 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'python3 -m pytest -v' 
+                sh 'python3 -m pytest -v'
             }
         }
-    }   
+    }
 }
+EOF
