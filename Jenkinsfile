@@ -8,15 +8,19 @@ pipeline {
                 sh 'ls -la'
             }
         }
-        stage('Info') {
-            steps {
-                sh 'git log -1 --oneline'
-                sh 'cat Dockerfile'
-            }
-        }
         stage('Test') {
             steps {
                 sh 'python3 -m pytest -v'
+            }
+        }
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t jenkins-lab:${BUILD_NUMBER} .'
+            }
+        }
+        stage('Run Image') {
+            steps {
+                sh 'docker run --rm jenkins-lab:${BUILD_NUMBER}'
             }
         }
     }
