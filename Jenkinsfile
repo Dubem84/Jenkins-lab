@@ -16,8 +16,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'python3 --version || echo "Python is not installed in this Jenkins container"'
+                sh 'python3 -m pytest -v' 
             }
         }
-    }
-}
+   
