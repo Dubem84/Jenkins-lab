@@ -1,11 +1,14 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE = 'dubemifedi/jenkins-lab'
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
-                sh 'ls -la'
             }
         }
         stage('Test') {
@@ -15,12 +18,21 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                sh 'docker build -t jenkins-lab:${BUILD_NUMBER} .'
+                sh 'docker build -t $IMAGE:${BUILD_NUMBER} -t $IMAGE:latest .'
             }
         }
         stage('Run Image') {
             steps {
-                sh 'docker run --rm jenkins-lab:${BUILD_NUMBER}'
+                sh 'docker run --rm $IMAGE:${BUILD_NUMBER}'
+            }
+        }
+        stage('Push Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
+                    sh 'echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin'
+                    sh 'docker push $IMAGE:${BUILD_NUMBER}'
+                    sh 'docker push $IMAGE:latest'
+                }
             }
         }
     }
