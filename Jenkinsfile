@@ -23,7 +23,7 @@ pipeline {
         }
         stage('Run Image') {
             steps {
-                sh 'docker run --rm $IMAGE:${BUILD_NUMBER}'
+                sh 'docker run --rm $IMAGE:${BUILD_NUMBER} python app.py'
             }
         }
         stage('Push Image') {
