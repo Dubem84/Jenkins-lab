@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins-lab
+  template:
+    metadata:
+      labels:
+        app: jenkins-lab
+    spec:
+      containers:
+        - name: jenkins-lab
+          image: dubemifedi/jenkins-lab:latest
